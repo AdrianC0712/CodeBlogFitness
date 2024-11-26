@@ -20,7 +20,7 @@ namespace CodeBlogFitness.BL.Model
                 throw new ArgumentNullException("Genul nu poate fi null!", nameof(name));  
             }
 
-            Name = name;  
+            Name = name;
         }
 
         public override string ToString()
