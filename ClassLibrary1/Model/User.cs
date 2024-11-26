@@ -13,10 +13,12 @@ namespace CodeBlogFitness.BL.Model
     public class User
     {
         public String Name { get; }   
-        public Gender Gender { get; }
-        public DateTime BirthDate { get; }
+        public Gender Gender { get; set; }
+        public DateTime BirthDate { get; set; }
         public double Weight { get; set; } 
         public double Height { get; set; }
+
+        public int Age { get { return DateTime.Now.Year - BirthDate.Year; } }
         
         public User( string name, Gender gender, DateTime birthDate, double weight, double height)
         {
@@ -56,7 +58,16 @@ namespace CodeBlogFitness.BL.Model
         }
         public override string ToString() 
         { 
-            return Name;    
+            return Name + " " + Age;    
+        }
+
+        public User(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("Numele utilizatorului nu poate fi null!", nameof(name));
+            }
+            Name= name; 
         }
     }
 }

@@ -19,23 +19,58 @@ namespace CodeBlogFitness.CMD
             Console.WriteLine("Introduceti numele utilizatorului!");
             var name = Console.ReadLine();
 
-            Console.WriteLine("Introduceti genul utilizatorului!");
-            var gender = Console.ReadLine();
+            var userController = new UserController(name);
 
-            Console.WriteLine("Introduceti data nasterii!");
-            var birdthDay = DateTime.Parse(Console.ReadLine());
+            if (userController.IsNewUser)
+            {
+                Console.WriteLine("Introduceti genul utilizatorului!");
+                var gender = Console.ReadLine();
+                var birthDate = ParseDateTime();
+                var weight = ParseDouble("Greutatea");
+                var height = ParseDouble("inaltimea");
+                
+                userController.SetNewUserData(gender, birthDate, weight, height);
 
-            Console.WriteLine("Introduceti greutatea utilizatorului!");
-            var weight = double.Parse(Console.ReadLine());
+            }
 
-            Console.WriteLine("Introduceti inaltimea utilizatorului!");
-            var height = double.Parse(Console.ReadLine());
-
-            var userController = new UserController(name, gender, birdthDay, weight, height);
-
-            userController.Save();
+            Console.WriteLine(userController.CurrentUser);
 
             Console.ReadLine();
+        }
+
+        private static DateTime ParseDateTime()
+        {
+            DateTime birthDate;
+            while (true)
+            {
+                Console.WriteLine("Introduceti anul nasterii (dd.MM.yyyy)!");
+                if (DateTime.TryParse(Console.ReadLine(), out birthDate))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Nu este corect formatul datei introduse!!!");
+                }
+            }
+
+            return birthDate;
+        }
+
+        private static double ParseDouble(string name)
+        {
+            while (true) 
+            {
+                Console.WriteLine($"Introduceti {name}: ");
+                if (double.TryParse(Console.ReadLine(), out double value))
+                {
+                    return value;
+                }
+                else
+                {
+                    Console.WriteLine($"Format incorect {name}");
+                }
+            }  
         }
     }
 }
