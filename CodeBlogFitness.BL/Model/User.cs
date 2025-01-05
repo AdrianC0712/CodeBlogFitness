@@ -10,6 +10,7 @@ namespace CodeBlogFitness.BL.Model
     /// <summary>
     /// Utilizator
     /// </summary>
+    [Serializable]
     public class User
     {
         #region Parametrii utilizatorului
@@ -48,23 +49,23 @@ namespace CodeBlogFitness.BL.Model
             #region Verificarea coditiilor
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException("Numele utilizatorului nu poate fi gol sau nulL!",nameof(name));
+                throw new ArgumentNullException("Numele utilizatorului nu poate fi gol sau nulL!", nameof(name));
             }
-            if (Gender == null)
-            { 
-                throw new ArgumentNullException("Genul nu poate fi null!",nameof(gender));
+            if (gender == null)
+            {
+                throw new ArgumentNullException("Genul nu poate fi null!", nameof(gender));
             }
             if (birthDate < DateTime.Parse("01.01.1900") || birthDate >= DateTime.Now)
             {
-                throw new ArgumentNullException("Data nasterii nu poate fi mai mica sau egal cu 01.01.1900 sau mai mare ca data de azi!",nameof(birthDate));
+                throw new ArgumentNullException("Data nasterii nu poate fi mai mica sau egal cu 01.01.1900 sau mai mare ca data de azi!", nameof(birthDate));
             }
             if (weight <= 0)
             {
-                throw new ArgumentNullException("Greutatea nu poate fi mai mica sau egal cu 0!",nameof(weight));
+                throw new ArgumentNullException("Greutatea nu poate fi mai mica sau egal cu 0!", nameof(weight));
             }
             if (height <= 0)
             {
-                throw new ArgumentNullException("Intaltimea nu poate fi mai mica sau egal cu 0!",nameof(height));
+                throw new ArgumentNullException("Intaltimea nu poate fi mai mica sau egal cu 0!", nameof(height));
             }
             #endregion
 
