@@ -21,11 +21,11 @@ namespace CodeBlogFitness.BL.Model
         /// <summary>
         /// Genul utilizatorului
         /// </summary>
-        public Gender Gender { get; }
+        public Gender Gender { get; set; }
         /// <summary>
         /// Data nasterii utilizatorului
         /// </summary>
-        public DateTime BirthDate { get; }
+        public DateTime BirthDate { get; set; }
         /// <summary>
         /// Inaltimea utilizatorului
         /// </summary>
@@ -42,7 +42,8 @@ namespace CodeBlogFitness.BL.Model
         /// <param name="birthDate">Data nasterii utilizatorului</param>
         /// <param name="weight">Greutatea utilizatorului</param>
         /// <param name="height">Inaltimea utilizatorului</param>
-        /// <exception cref="ArgumentNullException"> Verificarea parametrilor daca sunt null</exception>
+        /// <exception cref="ArgumentNullException"> Verificarea parametrilor daca sunt null</exception> 
+        public int Age { get { return DateTime.Now.Year - BirthDate.Year; } }
         #endregion
         public User(string name, Gender gender, DateTime birthDate, double weight, double height)
         {
@@ -75,9 +76,18 @@ namespace CodeBlogFitness.BL.Model
             Weight = weight;
             Height = height;
         }
+
+        public User(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException("Numele utilizatorului nu poate fi gol sau nulL!", nameof(name));
+            }
+            Name = name;
+        }
         public override string ToString()
         {
-            return Name;
+            return Name + " " + Age;
         }
     }
 }

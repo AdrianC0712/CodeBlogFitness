@@ -11,13 +11,62 @@ namespace CodeBlogFitness.BL.Controller
 {
     public class UserController
     {
-        public User User { get; }
+        public List<User> Users { get; }
 
-        public UserController(string userName, string genderName, DateTime birdtDay, double weight, double height )
+        public User CurrentUser { get; }
+
+        public bool IsNewUser { get; } = false;
+        public UserController(string userName )
         {
-            var gender = new Gender(genderName);
-            User user = new User(userName, gender, birdtDay, weight, height);
-            User = user ?? throw new ArgumentNullException("Utilizatorul nu poate fi null!",nameof(user));
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                throw new ArgumentNullException("Numele utilizatorului nu paote fi gol!", nameof(userName));
+            }
+
+            Users = GetUsersData();
+
+            CurrentUser = Users.SingleOrDefault(u => u.Name == userName);
+
+            if (CurrentUser == null)
+            {
+                CurrentUser = new User(userName);
+                Users.Add(CurrentUser);
+                IsNewUser = true;   
+                Save();
+            }
+        }
+
+        public void SetNewUserData(string genderName, DateTime birthDate, double weight = 1, double height = 1)
+        { 
+            //TODO verificare
+            CurrentUser.Gender = new Gender(genderName);
+            CurrentUser.BirthDate = birthDate;
+            CurrentUser.Weight = weight;
+            CurrentUser.Height = height;
+            Save();
+        }
+
+        /// <summary>
+        /// Primim lista utilizatorilor
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="FileLoadException">Exceptie in cazul in care nu primim date despre utilizator</exception>
+        private List<User> GetUsersData()
+        {
+            var formatter = new BinaryFormatter();
+
+            using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
+            {
+                if (formatter.Deserialize(fs) is List<User> users)
+                {
+                    return users;
+                }
+                else
+                { 
+                    return new List<User>();
+                }
+                //TODO: ce facem daca nu primim utilizatorul
+            }
         }
         /// <summary>
         /// Salvam datele utilizatorului
@@ -28,25 +77,7 @@ namespace CodeBlogFitness.BL.Controller
 
             using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
             {
-                formatter.Serialize(fs, User);    
-            }
-        }
-        /// <summary>
-        /// Primim datele utilizatorului
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="FileLoadException">Exceptie in cazul in care nu primim date despre utilizator</exception>
-        public UserController()
-        {
-            var formatter = new BinaryFormatter();
-
-            using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
-            {
-                if (formatter.Deserialize(fs) is User user)
-                {
-                    User = user;
-                }
-                //TODO: ce facem daca nu primim utilizatorul
+                formatter.Serialize(fs, Users);
             }
         }
     }

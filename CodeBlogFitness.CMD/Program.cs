@@ -16,21 +16,52 @@ namespace CodeBlogFitness.CMD
             Console.WriteLine("Introduceti numele utilizatorului!");
             var name = Console.ReadLine();
 
-            Console.WriteLine("Introduce genul utilizatorului!");
-            var gender = Console.ReadLine();
+            var userController = new UserController(name);
+            if (userController.IsNewUser)
+            {
+                Console.WriteLine("Introduceti genul:");
+                var gender = Console.ReadLine();
+                DateTime birthDate = ParseDateTime();
+                double weight = ParseDouble("Greutatea");
+                double height = ParseDouble("Inlatimea");
 
-            Console.WriteLine("Introduceti data nasterii utilizatorului!");
-            DateTime birthdate = DateTime.Parse(Console.ReadLine());
+                userController.SetNewUserData(gender, birthDate, weight, height);
+            }
+            Console.WriteLine(userController.CurrentUser);
+            Console.ReadLine(); 
+        }
 
-            Console.WriteLine("Introduceti greutatea utilizatorului!");
-            var weight = double.Parse(Console.ReadLine());
-
-            Console.WriteLine("Introduceti inaltimea utilizatorului!");
-            var height = double.Parse(Console.ReadLine());
-
-            var userController = new UserController(name, gender, birthdate, weight, height);
-
-            userController.Save();
+        private static DateTime ParseDateTime()
+        {
+            DateTime birthDate;
+            while (true)
+            {
+                Console.WriteLine("Introduceti data nasterii:");
+                if (DateTime.TryParse(Console.ReadLine(), out birthDate))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Tipul datei este incorect!");
+                }
+            }
+            return birthDate;   
+        }
+        private static double ParseDouble(string name)
+        {
+            while (true)
+            {
+                Console.WriteLine($"Introduceti {name}: ");
+                if (double.TryParse(Console.ReadLine(), out double value))
+                {
+                    return value;
+                }
+                else
+                {
+                    Console.WriteLine($"Tipul {name} este incorect!");
+                }
+            }
         }
     }
 }
