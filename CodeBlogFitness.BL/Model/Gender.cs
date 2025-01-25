@@ -12,7 +12,7 @@ namespace CodeBlogFitness.BL.Model
         /// <summary>
         /// Genul persoanei
         /// </summary>
-        public string Name { get; }
+        public string Name { get; set; }
         /// <summary>
         /// Se creaza un nou gen
         /// </summary>
