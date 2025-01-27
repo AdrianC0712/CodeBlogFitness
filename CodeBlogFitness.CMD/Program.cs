@@ -17,6 +17,7 @@ namespace CodeBlogFitness.CMD
             var name = Console.ReadLine();
 
             var userController = new UserController(name);
+            var eatingController = new EatingController(userController.CurrentUser);
             if (userController.IsNewUser)
             {
                 Console.WriteLine("Introduceti genul:");
@@ -28,7 +29,40 @@ namespace CodeBlogFitness.CMD
                 userController.SetNewUserData(gender, birthDate, weight, height);
             }
             Console.WriteLine(userController.CurrentUser);
+
+            Console.WriteLine("Selecti optiunea dorita!");
+            Console.WriteLine("E - introduceti mincarea servita!");
+            var key = Console.ReadKey();
+            Console.WriteLine();
+
+            if (key.Key == ConsoleKey.E)
+            {
+                var foods = EnterEating();
+                eatingController.Add(foods.Food, foods.Weight);
+
+                foreach (var item in eatingController.Eatings.Foods)
+                {
+                    Console.WriteLine($"\t{item.Key} - {item.Value}");
+                }
+            }
+
             Console.ReadLine(); 
+        }
+
+        private static (Food Food, double Weight) EnterEating()
+        {
+            Console.WriteLine("Introduceti numele produsului: ");
+            var food = Console.ReadLine();
+
+            var calories = ParseDouble("calorii");
+            var prots = ParseDouble("proteine");
+            var fats = ParseDouble("grasimi");
+            var carbs = ParseDouble("carbohitrati");
+
+            var weight = ParseDouble("Greutatea portiei");
+            var product = new Food(food, calories, prots, fats, carbs);
+
+            return (Food: product, Weight : weight);
         }
 
         private static DateTime ParseDateTime()
